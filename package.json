@@ -1,0 +1,19 @@
+{
+  "name": "slide_comments",
+  "version": "1.0.0",
+  "description": "IT勉強会用スライドショーツール",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nampei/slide_comments.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nampei/slide_comments/issues"
+  },
+  "homepage": "https://github.com/nampei/slide_comments#readme"
+}
