@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/nampei/slide_comments/issues"
   },
-  "homepage": "https://github.com/nampei/slide_comments#readme"
+  "homepage": "https://github.com/nampei/slide_comments#readme",
+  "devDependencies": {
+    "socket.io": "^1.4.5"
+  }
 }
