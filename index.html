@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>Slide_Comments</title>
+        <script src="/socket.io/socket.io.js"></script>
+<script>
+var socket = io.connect('http://localhost');
+socket.on('news', function (data) {
+console.log(data);
+socket.emit('my other event', { my: 'data' });
+});
+</script>
+        </script>
+    </head>
+    <body>
+        <h1>This is Slide_Comments application!!!</h1>
+    </body>
+</html>
