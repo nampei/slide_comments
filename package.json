@@ -16,8 +16,14 @@
     "url": "https://github.com/nampei/slide_comments/issues"
   },
   "homepage": "https://github.com/nampei/slide_comments#readme",
-  "devDependencies": {
-    "redis": "^2.4.2",
+  "dependencies": {
+    "express": "^4.13.4",
     "socket.io": "^1.4.5"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-stage-0": "^6.3.13",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^6.1.2"
   }
 }
