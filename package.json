@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/nampei/slide_comments#readme",
   "devDependencies": {
+    "redis": "^2.4.2",
     "socket.io": "^1.4.5"
   }
 }
