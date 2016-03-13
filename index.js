@@ -11,13 +11,19 @@ app.get('/', function(req, res) {
     res.sendFile(__dirname + '/index.html');
 });
 
-io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
+io.on('connection', function(socket) {
+  socket.on('chat message', function(msg) {
     console.log('message: ' + msg);
   });
-  socket.on('slide state', function(state){
+
+  socket.on('slide state', function(state) {
     console.log(JSON.parse(state));
   });
+
+  socket.on('slide fragment', function(fragment) {
+    console.log(JSON.parse(fragment));
+  });
+
   socket.broadcast.emit('sousin','これが送りたい文字だ！');
   socket.emit('sousin','これが送りたい文字だ！');
 
