@@ -410,10 +410,12 @@
       $('#m').val('');
       return false;
     });
+
     socket.on('broad state', function(data) {　　
       var state = JSON.parse(data);
-      Reveal.setState(state);　
+      Reveal.setState(state);
     });
+
     socket.on('broad fragment', function(data) {
         var fragment = JSON.parse(data);
         if (fragment) {
@@ -421,9 +423,17 @@
         } else {
           Reveal.prevFragment();
         }
-      })
-      // Full list of configuration options available at:
-      // https://github.com/hakimel/reveal.js#configuration
+    });
+
+    socket.on('broad overview', function(data) {
+        var overview = JSON.parse(data);
+        var state = Reveal.getState();
+        state.overview = overview;
+        Reveal.setState(state);
+    });
+
+    // Full list of configuration options available at:
+    // https://github.com/hakimel/reveal.js#configuration
     Reveal.initialize({
       controls: true,
       progress: true,
@@ -487,12 +497,21 @@
       socket.emit('slide fragment', JSON.stringify(false));
     });
 
+    Reveal.addEventListener('overviewshown', function(e) {
+      socket.emit('slide overview', JSON.stringify(true));
+    });
+
+    Reveal.addEventListener('overviewhidden', function(e) {
+      socket.emit('slide overview', JSON.stringify(false));
+    });
+
     function emitSlideState(e){
       var state = {
         indexh: e.indexh,
         indexv: e.indexv
       };
-      socket.emit('slide state', JSON.stringify(state));
+      // socket.emit('slide state', JSON.stringify(state));
+      socket.emit('slide state', JSON.stringify(Reveal.getState()));
     }
 
   </script>

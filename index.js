@@ -26,6 +26,11 @@ io.on('connection', function(socket) {
     socket.broadcast.emit('broad fragment', fragment);
   });
 
+  socket.on('slide overview', function(overview) {
+    console.log(JSON.parse(overview));
+    socket.broadcast.emit('broad overview', overview);
+  });
+
   // var socketID = 送りたい相手のソケットID
   // socket.to(socketID).emit(‘sousin’,’これが送りたい文字だ！’);
 });
