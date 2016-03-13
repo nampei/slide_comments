@@ -406,9 +406,17 @@
   <script>
     var socket = io();
     $('form').submit(function() {
-      socket.emit('chat message', $('#m').val());
+      socket.emit('chat', JSON.stringify({
+        message:$('#m').val()
+      }));
       $('#m').val('');
       return false;
+    });
+
+    socket.on('broad chat', function(data) {　　
+      var chat = JSON.parse(data);
+      console.log(chat.message);
+      // TODO: show message
     });
 
     socket.on('broad state', function(data) {　　
