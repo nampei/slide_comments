@@ -1,8 +1,11 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
 server.listen(80);
+
+app.use(express.static('public'));
 
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/index.html');
@@ -11,5 +14,8 @@ app.get('/', function(req, res) {
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);
+  });
+  socket.on('slide state', function(state){
+    console.log(JSON.parse(state));
   });
 });
