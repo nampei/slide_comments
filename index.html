@@ -463,21 +463,14 @@
       }]
     });
 
-    /**
-     * スライドの変更を検知
-     * @param {[type]} 'slidechanged' [description]
-     * @param {[type]} function(      e             [description]
-     */
+    Reveal.addEventListener('ready', function(e) {
+      // e.currentSlide, e.indexh, e.indexv
+      emitSlideState(e);
+    } );
+
     Reveal.addEventListener('slidechanged', function(e) {
       // e.previousSlide, e.currentSlide, e.indexh, e.indexv
-      var state = {
-        indexh: e.indexh,
-        indexv: e.indexv
-      };
-
-      console.log('e:', e);
-      console.log('state:', state);
-      socket.emit('slide state', JSON.stringify(state));
+      emitSlideState(e);
     });
 
     Reveal.addEventListener('somestate', function() {
@@ -486,17 +479,22 @@
 
     Reveal.addEventListener('fragmentshown', function(e) {
       // e.fragment = the fragment DOM element
-      // console.log('e:', e);
-      // console.log('fragmentshown:', e.fragment);
       socket.emit('slide fragment', JSON.stringify(true));
     });
 
     Reveal.addEventListener('fragmenthidden', function(e) {
       // e.fragment = the fragment DOM element
-      // console.log('e:', e);
-      // console.log('fragmenthidden:', e.fragment);
       socket.emit('slide fragment', JSON.stringify(false));
     });
+
+    function emitSlideState(e){
+      var state = {
+        indexh: e.indexh,
+        indexv: e.indexv
+      };
+      socket.emit('slide state', JSON.stringify(state));
+    }
+
   </script>
 </body>
 
