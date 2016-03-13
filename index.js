@@ -18,4 +18,9 @@ io.on('connection', function(socket){
   socket.on('slide state', function(state){
     console.log(JSON.parse(state));
   });
+  socket.broadcast.emit('sousin','これが送りたい文字だ！');
+  socket.emit('sousin','これが送りたい文字だ！');
+
+  // var socketID = 送りたい相手のソケットID
+  // socket.to(socketID).emit(‘sousin’,’これが送りたい文字だ！’);
 });
