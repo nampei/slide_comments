@@ -446,14 +446,33 @@
          * @param {[type]} function(      e             [description]
          */
         Reveal.addEventListener('slidechanged', function(e) {
-            // e.previousSlide, e.currentSlide, e.indexh, e.indexv
-            var state = {
-              indexh: e.indexh,
-              indexv: e.indexv
-            };
+          // e.previousSlide, e.currentSlide, e.indexh, e.indexv
+          var state = {
+            indexh: e.indexh,
+            indexv: e.indexv
+          };
 
-            console.log('state:', state);
-            socket.emit('slide state', JSON.stringify(state));
+          console.log('e:', e);
+          console.log('state:', state);
+          socket.emit('slide state', JSON.stringify(state));
+        });
+
+        Reveal.addEventListener('somestate', function() {
+          console.log('somestate');
+        }, false );
+
+        Reveal.addEventListener('fragmentshown', function(e) {
+          // e.fragment = the fragment DOM element
+          // console.log('e:', e);
+          // console.log('fragmentshown:', e.fragment);
+          socket.emit('slide fragment', JSON.stringify(true));
+        });
+
+        Reveal.addEventListener('fragmenthidden', function(e) {
+          // e.fragment = the fragment DOM element
+          // console.log('e:', e);
+          // console.log('fragmenthidden:', e.fragment);
+          socket.emit('slide fragment', JSON.stringify(false));
         } );
 
     </script>
