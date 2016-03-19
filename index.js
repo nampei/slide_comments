@@ -13,6 +13,7 @@ app.get('/', function(req, res) {
 
 io.on('connection', function(socket) {
   socket.on('chat', function(chat) {
+    console.log(JSON.parse(chat));
     socket.broadcast.emit('broad chat', chat);
   });
 

@@ -58,6 +58,10 @@
       background: #eee;
     }
 
+    .marquee {
+      color: white
+    }
+
     .reveal h1,
     .reveal h2,
     .reveal h3,
@@ -70,6 +74,7 @@
 </head>
 
 <body>
+  <div id="marquee_area"></div>
   <div class="reveal">
 
     <!-- Any section element inside of this container is displayed as a slide -->
@@ -82,7 +87,6 @@
         </script>
       </section>
     </div>
-    <div class="marquee"></div>
   </div>
   <ul id="messages"></ul>
   <form action="">
@@ -101,12 +105,7 @@
         message:message
       }));
 
-      $('.marquee')
-        .text(message)
-        .bind('finished', function () {
-            $(this).remove();
-        })
-        .marquee();
+      marquee(message);
 
       $('#m').val('');
       return false;
@@ -114,12 +113,8 @@
 
     socket.on('broad chat', function(data) {　　
       var chat = JSON.parse(data);
-      $('.marquee')
-        .text(chat.message)
-        .bind('finished', function () {
-            $(this).remove();
-        })
-        .marquee();
+
+      marquee(chat.message);
 
     });
 
@@ -224,6 +219,21 @@
       };
       // socket.emit('slide state', JSON.stringify(state));
       socket.emit('slide state', JSON.stringify(Reveal.getState()));
+    }
+
+    function marquee(message) {
+
+      var $marquee = $('<div />', {
+        class: 'marquee',
+        text: message
+      }).bind('finished', function () {
+        $(this).remove();
+      });
+
+      $('#marquee_area')
+        .append($marquee);
+
+      $marquee.marquee();
     }
 
   </script>
