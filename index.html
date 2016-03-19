@@ -44,20 +44,6 @@
       padding: 10px;
     }
 
-    #messages {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    #messages li {
-      padding: 5px 10px;
-    }
-
-    #messages li:nth-child(odd) {
-      background: #eee;
-    }
-
     .marquee {
       color: white
     }
@@ -74,9 +60,8 @@
 </head>
 
 <body>
-  <div id="marquee_area"></div>
   <div class="reveal">
-
+    <div id="marquee_area"></div>
     <!-- Any section element inside of this container is displayed as a slide -->
     <div class="slides">
       <section data-markdown="./md/slide.md"
@@ -88,7 +73,6 @@
       </section>
     </div>
   </div>
-  <ul id="messages"></ul>
   <form action="">
     <input id="m" autocomplete="off" />
     <button>Send</button>
