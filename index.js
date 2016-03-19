@@ -30,7 +30,4 @@ io.on('connection', function(socket) {
     console.log(JSON.parse(overview));
     socket.broadcast.emit('broad overview', overview);
   });
-
-  // var socketID = 送りたい相手のソケットID
-  // socket.to(socketID).emit(‘sousin’,’これが送りたい文字だ！’);
 });
