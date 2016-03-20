@@ -8,7 +8,15 @@ server.listen(80);
 app.use(express.static('public'));
 
 app.get('/', function(req, res) {
-    res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/host', function(req, res) {
+  res.sendFile(__dirname + '/host.html');
+});
+
+app.get('/guest', function(req, res) {
+  res.sendFile(__dirname + '/guest.html');
 });
 
 io.on('connection', function(socket) {
