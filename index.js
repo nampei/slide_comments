@@ -5,38 +5,37 @@ var io = require('socket.io')(server);
 
 server.listen(80);
 
-app.use(express.static('public'));
+app.set('view engine', 'ejs');
 
-app.get('/', function(req, res) {
-  res.sendFile(__dirname + '/index.html');
-});
+app.use('/:room/:type(host|guest)', express.static('public'));
 
-app.get('/host', function(req, res) {
-  res.sendFile(__dirname + '/host.html');
-});
-
-app.get('/guest', function(req, res) {
-  res.sendFile(__dirname + '/guest.html');
+app.get('/:room/:type(host|guest)', function(req, res) {
+  res.render('index', { room:req.params.room, type: req.params.type});
 });
 
 io.on('connection', function(socket) {
-  socket.on('chat', function(chat) {
+
+  socket.on('join room', function(type, room) {
+    socket.join(room);
+  });
+
+  socket.on('chat', function(type, room, chat) {
     console.log(JSON.parse(chat));
-    socket.broadcast.emit('broad chat', chat);
+    socket.broadcast.to(room).emit('broad chat', chat);
   });
 
-  socket.on('slide state', function(state) {
+  socket.on('slide state', function(type, room, state) {
     console.log(JSON.parse(state));
-    socket.broadcast.emit('broad state', state);
+    socket.broadcast.to(room).emit('broad state', state);
   });
 
-  socket.on('slide fragment', function(fragment) {
+  socket.on('slide fragment', function(type, room, fragment) {
     console.log(JSON.parse(fragment));
-    socket.broadcast.emit('broad fragment', fragment);
+    socket.broadcast.to(room).emit('broad fragment', fragment);
   });
 
-  socket.on('slide overview', function(overview) {
+  socket.on('slide overview', function(type, room, overview) {
     console.log(JSON.parse(overview));
-    socket.broadcast.emit('broad overview', overview);
+    socket.broadcast.to(room).emit('broad overview', overview);
   });
 });

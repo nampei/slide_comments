@@ -83,6 +83,8 @@
 </head>
 
 <body>
+  <input type="hidden" id="room" value="<%= room %>">
+  <input type="hidden" id="type" value="<%= type %>">
   <div id="marquee-area"></div>
   <div class="reveal">
     <!-- Any section element inside of this container is displayed as a slide -->
@@ -108,10 +110,18 @@
 
 
     var socket = io();
+
+    var type = $("#type").val();
+    var room = $("#room").val();
+
+    socket.on('connect', function() {
+       socket.emit('join room', type, room);
+    });
+
     $('form').submit(function() {
 
       var message = $('#m').val();
-      socket.emit('chat', JSON.stringify({
+      socket.emit('chat', type, room, JSON.stringify({
         message:message
       }));
 
@@ -128,28 +138,26 @@
 
     });
 
-    // 変更: ゲスト側が画面遷移などしてもホスト側の画面を遷移させないよう、以下をコメントアウトした
+    socket.on('broad state', function(data) {　　
+      var state = JSON.parse(data);
+      Reveal.setState(state);
+    });
 
-    // socket.on('broad state', function(data) {　　
-    //   var state = JSON.parse(data);
-    //   Reveal.setState(state);
-    // });
-    //
-    // socket.on('broad fragment', function(data) {
-    //     var fragment = JSON.parse(data);
-    //     if (fragment) {
-    //       Reveal.nextFragment();
-    //     } else {
-    //       Reveal.prevFragment();
-    //     }
-    // });
+    socket.on('broad fragment', function(data) {
+        var fragment = JSON.parse(data);
+        if (fragment) {
+          Reveal.nextFragment();
+        } else {
+          Reveal.prevFragment();
+        }
+    });
 
-    // socket.on('broad overview', function(data) {
-    //     var overview = JSON.parse(data);
-    //     var state = Reveal.getState();
-    //     state.overview = overview;
-    //     Reveal.setState(state);
-    // });
+    socket.on('broad overview', function(data) {
+        var overview = JSON.parse(data);
+        var state = Reveal.getState();
+        state.overview = overview;
+        Reveal.setState(state);
+    });
 
     // Full list of configuration options available at:
     // https://github.com/hakimel/reveal.js#configuration
@@ -208,20 +216,20 @@
 
     Reveal.addEventListener('fragmentshown', function(e) {
       // e.fragment = the fragment DOM element
-      socket.emit('slide fragment', JSON.stringify(true));
+      socket.emit('slide fragment', type, room, JSON.stringify(true));
     });
 
     Reveal.addEventListener('fragmenthidden', function(e) {
       // e.fragment = the fragment DOM element
-      socket.emit('slide fragment', JSON.stringify(false));
+      socket.emit('slide fragment', type, room, JSON.stringify(false));
     });
 
     Reveal.addEventListener('overviewshown', function(e) {
-      socket.emit('slide overview', JSON.stringify(true));
+      socket.emit('slide overview', type, room, JSON.stringify(true));
     });
 
     Reveal.addEventListener('overviewhidden', function(e) {
-      socket.emit('slide overview', JSON.stringify(false));
+      socket.emit('slide overview', type, room, JSON.stringify(false));
     });
 
     $('#voice-button').on('click', function(e) {
@@ -233,7 +241,7 @@
 
         var message = e.results.item(0).item(0).transcript;
 
-        socket.emit('chat', JSON.stringify({
+        socket.emit('chat', type, room, JSON.stringify({
           message:message
         }));
 
@@ -249,7 +257,7 @@
         indexv: e.indexv
       };
       // socket.emit('slide state', JSON.stringify(state));
-      socket.emit('slide state', JSON.stringify(Reveal.getState()));
+      socket.emit('slide state', type, room, JSON.stringify(Reveal.getState()));
     }
 
     function marquee(message) {
