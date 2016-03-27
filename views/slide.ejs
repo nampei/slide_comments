@@ -4,82 +4,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-
   <link rel="stylesheet" href="../../../public/css/reveal.css">
   <link rel="stylesheet" href="../../../public/css/theme/black.css" id="theme">
-
+  <link rel="stylesheet" href="../../../public/css/slide.css">
   <title>Slide_Comments</title>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font: 13px Helvetica, Arial;
-    }
-
-    form {
-      background: #000;
-      padding: 3px;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      z-index: 10000;
-    }
-
-    form input[type=text] {
-      border: 0;
-      padding: 10px;
-      width: 80%;
-      margin-right: .5%;
-    }
-
-    form input[type=button].text {
-      width: 8%;
-      background: rgb(130, 224, 255);
-      border: none;
-      padding: 10px;
-    }
-
-    form input[type=button].voice {
-      width: 8%;
-      background: rgb(130, 224, 255);
-      border: none;
-      padding: 10px;
-    }
-
-    #marquee-area {
-      position: fixed;
-      width: 100%;
-    }
-    .marquee {
-      width: 100%;
-      color: white;
-      z-index: 5000
-    }
-
-    .reveal h1,
-    .reveal h2,
-    .reveal h3,
-    .reveal h4,
-    .reveal h5,
-    .reveal h6 {
-      text-transform: none;
-    }
-
-    .reveal .controls {
-      bottom: 40px;
-    }
-
-    .reveal .progress {
-      bottom: 40px;
-    }
-
-  </style>
 </head>
 
 <body>
@@ -101,131 +29,12 @@
     <input type="button" id="text-button" class="text" value="Send" />
     <input type="button" id="voice-button" class="voice" value="Voice" />
   </form>
+  <script src="//code.jquery.com/jquery-1.11.1.js"></script>
   <script src='//cdn.jsdelivr.net/jquery.marquee/1.3.9/jquery.marquee.min.js'></script>
+  <script src="/socket.io/socket.io.js"></script>
   <script src="../../../public/lib/js/head.min.js"></script>
   <script src="../../../public/js/reveal.js"></script>
-  <script>
-
-
-    var socket = io();
-
-    var type = $("#type").val();
-    var room = $("#room").val();
-
-    socket.on('connect', function() {
-       socket.emit('join room', type, room);
-    });
-
-    $('form').submit(function() {
-
-      var message = $('#m').val();
-      socket.emit('chat', {
-        message:message
-      });
-
-      marquee(message);
-
-      $('#m').val('');
-      return false;
-    });
-
-    socket.on('broad chat', function(chat) {　　
-      marquee(chat.message);
-    });
-
-    socket.on('broad slide', function(state) {　　
-      Reveal.setState(state);
-    });
-
-    // Full list of configuration options available at:
-    // https://github.com/hakimel/reveal.js#configuration
-    Reveal.initialize({
-      controls: true,
-      progress: true,
-      history: true,
-      center: true,
-      help: false,
-      transition: 'slide', // none/fade/slide/convex/concave/zoom
-
-      // Optional reveal.js plugins
-      dependencies: [{
-        src: '../../../public/lib/js/classList.js',
-        condition: function() {
-          return !document.body.classList;
-        }
-      }, {
-        src: '../../../public/plugin/markdown/marked.js',
-        condition: function() {
-          return !!document.querySelector('[data-markdown]');
-        }
-      }, {
-        src: '../../../public/plugin/markdown/markdown.js',
-        condition: function() {
-          return !!document.querySelector('[data-markdown]');
-        }
-      }, {
-        src: '../../../public/plugin/highlight/highlight.js',
-        async: true,
-        callback: function() {
-          hljs.initHighlightingOnLoad();
-        }
-      }, {
-        src: '../../../public/plugin/zoom-js/zoom.js',
-        async: true
-      }, {
-        src: '../../../public/plugin/notes/notes.js',
-        async: true
-      }]
-    });
-
-    Reveal.addEventListener('ready', post);
-    Reveal.addEventListener('slidechanged', post);
-  	Reveal.addEventListener('fragmentshown', post);
-  	Reveal.addEventListener('fragmenthidden', post);
-  	Reveal.addEventListener('overviewhidden', post);
-  	Reveal.addEventListener('overviewshown', post);
-  	Reveal.addEventListener('paused', post);
-  	Reveal.addEventListener('resumed', post);
-
-    $('#voice-button').on('click', function(e) {
-      window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
-      var recognition = new webkitSpeechRecognition();
-      recognition.lang = 'ja';
-
-      recognition.addEventListener('result', function(e){
-
-        var message = e.results.item(0).item(0).transcript;
-
-        socket.emit('chat', {
-          message:message
-        });
-
-        marquee(message);
-      }, false);
-
-      recognition.start();
-    });
-
-    function post(e){
-      socket.emit('slide state', Reveal.getState());
-    }
-
-    function marquee(message) {
-
-      var $marquee = $('<div />', {
-        class: 'marquee',
-        text: message
-      }).bind('finished', function () {
-        $(this).remove();
-      });
-
-      $('#marquee-area')
-        .append($marquee);
-
-      $marquee.marquee();
-    }
-
-  </script>
+  <script src="../../../public/js/slide.js"></script>
 </body>
 
 </html>
