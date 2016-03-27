@@ -61,7 +61,8 @@ multi.exec(function(err, obj) {
   // トランザクションその２。watchの値が更新されて失敗。
   client.set("wkey1", "wval1");
   client.watch("wkey1");
-  client.set("wkey1", "wval-upd");
+  client.set("wkey1", "wval-upd"); // wkeyが更新されるので、mkey1とmkey2は更新されない
+  //上の行をコメントアウトするとmkey1とmkey2は更新される
   multi = client.multi();
   multi.set("mkey1", "mval3");
   multi.set("mkey2", "mval4");
