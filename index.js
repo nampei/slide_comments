@@ -52,26 +52,29 @@ app.get('/admin/', function(req, res) {
 io.on('connection', function(socket) {
 
   socket.on('join room', function(type, room) {
-    socket.setRoominfo = room;
     socket.join(room);
+
+    // 識別用
+    socket.addedType = type;
+    socket.addedRoom = room;
   });
 
-  socket.on('chat', function(type, room, chat) {
-    socket.broadcast.to(room).emit('broad chat', chat);
+  socket.on('chat', function(chat) {
+    socket.broadcast.to(socket.addedRoom).emit('broad chat', chat);
   });
 
-  socket.on('slide state', function(type, room, state) {
-    if (type === TYPE.GUEST) return;
-    socket.broadcast.to(room).emit('broad state', state);
+  socket.on('slide state', function(state) {
+    if (socket.addedType === TYPE.GUEST) return;
+    socket.broadcast.to(socket.addedRoom).emit('broad state', state);
   });
 
-  socket.on('slide fragment', function(type, room, fragment) {
-    if (type === TYPE.GUEST) return;
-    socket.broadcast.to(room).emit('broad fragment', fragment);
+  socket.on('slide fragment', function(fragment) {
+    if (socket.addedType === TYPE.GUEST) return;
+    socket.broadcast.to(socket.addedRoom).emit('broad fragment', fragment);
   });
 
-  socket.on('slide overview', function(type, room, overview) {
-    if (type === TYPE.GUEST) return;
-    socket.broadcast.to(room).emit('broad overview', overview);
+  socket.on('slide overview', function(overview) {
+    if (socket.addedType === TYPE.GUEST) return;
+    socket.broadcast.to(socket.addedRoom).emit('broad overview', overview);
   });
 });

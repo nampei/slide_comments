@@ -121,7 +121,7 @@
     $('form').submit(function() {
 
       var message = $('#m').val();
-      socket.emit('chat', type, room, JSON.stringify({
+      socket.emit('chat', JSON.stringify({
         message:message
       }));
 
@@ -216,20 +216,20 @@
 
     Reveal.addEventListener('fragmentshown', function(e) {
       // e.fragment = the fragment DOM element
-      socket.emit('slide fragment', type, room, JSON.stringify(true));
+      socket.emit('slide fragment', JSON.stringify(true));
     });
 
     Reveal.addEventListener('fragmenthidden', function(e) {
       // e.fragment = the fragment DOM element
-      socket.emit('slide fragment', type, room, JSON.stringify(false));
+      socket.emit('slide fragment', JSON.stringify(false));
     });
 
     Reveal.addEventListener('overviewshown', function(e) {
-      socket.emit('slide overview', type, room, JSON.stringify(true));
+      socket.emit('slide overview', JSON.stringify(true));
     });
 
     Reveal.addEventListener('overviewhidden', function(e) {
-      socket.emit('slide overview', type, room, JSON.stringify(false));
+      socket.emit('slide overview', JSON.stringify(false));
     });
 
     $('#voice-button').on('click', function(e) {
@@ -241,7 +241,7 @@
 
         var message = e.results.item(0).item(0).transcript;
 
-        socket.emit('chat', type, room, JSON.stringify({
+        socket.emit('chat', JSON.stringify({
           message:message
         }));
 
@@ -257,7 +257,7 @@
         indexv: e.indexv
       };
       // socket.emit('slide state', JSON.stringify(state));
-      socket.emit('slide state', type, room, JSON.stringify(Reveal.getState()));
+      socket.emit('slide state', JSON.stringify(Reveal.getState()));
     }
 
     function marquee(message) {
