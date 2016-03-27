@@ -119,9 +119,9 @@
     $('form').submit(function() {
 
       var message = $('#m').val();
-      socket.emit('chat', JSON.stringify({
+      socket.emit('chat', {
         message:message
-      }));
+      });
 
       marquee(message);
 
@@ -129,13 +129,11 @@
       return false;
     });
 
-    socket.on('broad chat', function(data) {　　
-      var chat = JSON.parse(data);
+    socket.on('broad chat', function(chat) {　　
       marquee(chat.message);
     });
 
-    socket.on('broad slide', function(data) {　　
-      var state = JSON.parse(data);
+    socket.on('broad slide', function(state) {　　
       Reveal.setState(state);
     });
 
@@ -198,9 +196,9 @@
 
         var message = e.results.item(0).item(0).transcript;
 
-        socket.emit('chat', JSON.stringify({
+        socket.emit('chat', {
           message:message
-        }));
+        });
 
         marquee(message);
       }, false);
@@ -209,7 +207,7 @@
     });
 
     function post(e){
-      socket.emit('slide state', JSON.stringify(Reveal.getState()));
+      socket.emit('slide state', Reveal.getState());
     }
 
     function marquee(message) {
