@@ -5,9 +5,15 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
+// const
+var TYPE = require('./const/type');
+
+// routes
 var routes = require('./routes/index');
 var auth = require('./routes/auth');
 var users = require('./routes/users');
+var slide = require('./routes/slide');
+
 var session = require('express-session');
 var passport = require('passport');
 var authorized = require('./middleware/auth');
@@ -27,6 +33,7 @@ require('./lib/passport')(passport);
 app.use('/login', routes);
 app.use('/auth', auth);
 app.use('/me', authorized, users);
+app.use('/:room/:type(' + TYPE.HOST + '|' + TYPE.GUEST + ')', slide);
 
 const PORT = 8080;
 
@@ -34,22 +41,10 @@ server.listen(PORT);
 
 console.log('server started. port:' + PORT);
 
-const TYPE = {
-  HOST: 'host',
-  GUEST: 'guest',
-}
-
 app.set('view engine', 'ejs');
 
-app.use('public', express.static('public'));
-app.use('/:room/:type(' + TYPE.HOST + '|' + TYPE.GUEST + ')', express.static('public'));
+app.use('/public', express.static(__dirname + '/public'));
 
-app.get('/:room/:type(' + TYPE.HOST + '|' + TYPE.GUEST + ')', function(req, res) {
-  res.render('index', {
-    room: req.params.room,
-    type: req.params.type
-  });
-});
 app.get('/admin/', function(req, res) {
   res.render('admin', {});
 });
