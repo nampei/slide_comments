@@ -93,8 +93,6 @@
             data-separator="^\r?\n---\r?\n$"
             data-separator-vertical="^\r?\n--\r?\n$"
             data-separator-notes="^Note:">
-        <script type="text/template">
-        </script>
       </section>
     </div>
   </div>
@@ -133,30 +131,12 @@
 
     socket.on('broad chat', function(data) {　　
       var chat = JSON.parse(data);
-
       marquee(chat.message);
-
     });
 
-    socket.on('broad state', function(data) {　　
+    socket.on('broad slide', function(data) {　　
       var state = JSON.parse(data);
       Reveal.setState(state);
-    });
-
-    socket.on('broad fragment', function(data) {
-        var fragment = JSON.parse(data);
-        if (fragment) {
-          Reveal.nextFragment();
-        } else {
-          Reveal.prevFragment();
-        }
-    });
-
-    socket.on('broad overview', function(data) {
-        var overview = JSON.parse(data);
-        var state = Reveal.getState();
-        state.overview = overview;
-        Reveal.setState(state);
     });
 
     // Full list of configuration options available at:
@@ -200,37 +180,14 @@
       }]
     });
 
-    Reveal.addEventListener('ready', function(e) {
-      // e.currentSlide, e.indexh, e.indexv
-      emitSlideState(e);
-    } );
-
-    Reveal.addEventListener('slidechanged', function(e) {
-      // e.previousSlide, e.currentSlide, e.indexh, e.indexv
-      emitSlideState(e);
-    });
-
-    Reveal.addEventListener('somestate', function() {
-      console.log('somestate');
-    }, false);
-
-    Reveal.addEventListener('fragmentshown', function(e) {
-      // e.fragment = the fragment DOM element
-      socket.emit('slide fragment', JSON.stringify(true));
-    });
-
-    Reveal.addEventListener('fragmenthidden', function(e) {
-      // e.fragment = the fragment DOM element
-      socket.emit('slide fragment', JSON.stringify(false));
-    });
-
-    Reveal.addEventListener('overviewshown', function(e) {
-      socket.emit('slide overview', JSON.stringify(true));
-    });
-
-    Reveal.addEventListener('overviewhidden', function(e) {
-      socket.emit('slide overview', JSON.stringify(false));
-    });
+    Reveal.addEventListener('ready', post);
+    Reveal.addEventListener('slidechanged', post);
+  	Reveal.addEventListener('fragmentshown', post);
+  	Reveal.addEventListener('fragmenthidden', post);
+  	Reveal.addEventListener('overviewhidden', post);
+  	Reveal.addEventListener('overviewshown', post);
+  	Reveal.addEventListener('paused', post);
+  	Reveal.addEventListener('resumed', post);
 
     $('#voice-button').on('click', function(e) {
       window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
@@ -251,12 +208,7 @@
       recognition.start();
     });
 
-    function emitSlideState(e){
-      var state = {
-        indexh: e.indexh,
-        indexv: e.indexv
-      };
-      // socket.emit('slide state', JSON.stringify(state));
+    function post(e){
       socket.emit('slide state', JSON.stringify(Reveal.getState()));
     }
 

@@ -18,11 +18,14 @@ var session = require('express-session');
 var passport = require('passport');
 var authorized = require('./middleware/auth');
 
+app.set('view engine', 'ejs');
+
 app.use(session({
   secret : 'cuaM6reezu7aechooLoh',
   resave : false,
   saveUninitialized : true,
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -35,15 +38,11 @@ app.use('/auth', auth);
 app.use('/me', authorized, users);
 app.use('/slide', slide);
 
-const PORT = 8080;
-
-server.listen(PORT);
-
-console.log('server started. port:' + PORT);
-
-app.set('view engine', 'ejs');
-
 app.use('/public', express.static(__dirname + '/public'));
+
+const PORT = 8080;
+server.listen(PORT);
+console.log('server started. port:' + PORT);
 
 app.get('/admin/', function(req, res) {
   res.render('admin', {});
@@ -54,7 +53,6 @@ io.on('connection', function(socket) {
   socket.on('join room', function(type, room) {
     socket.join(room);
 
-    // 識別用
     socket.addedType = type;
     socket.addedRoom = room;
   });
@@ -65,16 +63,6 @@ io.on('connection', function(socket) {
 
   socket.on('slide state', function(state) {
     if (socket.addedType === TYPE.GUEST) return;
-    socket.broadcast.to(socket.addedRoom).emit('broad state', state);
-  });
-
-  socket.on('slide fragment', function(fragment) {
-    if (socket.addedType === TYPE.GUEST) return;
-    socket.broadcast.to(socket.addedRoom).emit('broad fragment', fragment);
-  });
-
-  socket.on('slide overview', function(overview) {
-    if (socket.addedType === TYPE.GUEST) return;
-    socket.broadcast.to(socket.addedRoom).emit('broad overview', overview);
+    socket.broadcast.to(socket.addedRoom).emit('broad slide', state);
   });
 });
