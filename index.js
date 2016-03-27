@@ -32,6 +32,8 @@ const PORT = 8080;
 
 server.listen(PORT);
 
+console.log('server started. port:' + PORT);
+
 const TYPE = {
   HOST: 'host',
   GUEST: 'guest',
@@ -39,7 +41,7 @@ const TYPE = {
 
 app.set('view engine', 'ejs');
 
-app.use(express.static('public'));
+app.use('public', express.static('public'));
 app.use('/:room/:type(' + TYPE.HOST + '|' + TYPE.GUEST + ')', express.static('public'));
 
 app.get('/:room/:type(' + TYPE.HOST + '|' + TYPE.GUEST + ')', function(req, res) {
