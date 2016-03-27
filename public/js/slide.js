@@ -106,7 +106,10 @@ $(function(){
 
     var $marquee = $('<div />', {
       class: 'marquee',
-      css: {'top': Math.random() * ($(window).height()) + 'px'},
+      css: {
+        'top': Math.random() * ($(window).height()) + 'px',
+        'font-size': Math.random() * (30 - 10) + 10 + 'px',
+      },
       text: message
     }).bind('finished', function () {
       $(this).remove();
