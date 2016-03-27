@@ -33,7 +33,7 @@ require('./lib/passport')(passport);
 app.use('/login', routes);
 app.use('/auth', auth);
 app.use('/me', authorized, users);
-app.use('/:room/:type(' + TYPE.HOST + '|' + TYPE.GUEST + ')', slide);
+app.use('/slide', slide);
 
 const PORT = 8080;
 
