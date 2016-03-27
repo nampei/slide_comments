@@ -43,9 +43,10 @@ form input[type=button].voice {
   width: 100%;
 }
 .marquee {
+  position: absolute;
   width: 100%;
   color: white;
-  z-index: 5000
+  z-index: 5000;
 }
 
 .reveal h1,
