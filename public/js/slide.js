@@ -38,7 +38,9 @@ $(function(){
     center: true,
     help: false,
     transition: 'slide', // none/fade/slide/convex/concave/zoom
-
+    keyboard: {
+      82: refresh
+    },
     // Optional reveal.js plugins
     dependencies: [{
       src: '../../../public/lib/js/classList.js',
@@ -70,33 +72,17 @@ $(function(){
     }]
   });
 
-  Reveal.addEventListener('ready', post);
-  Reveal.addEventListener('slidechanged', post);
-  Reveal.addEventListener('fragmentshown', post);
-  Reveal.addEventListener('fragmenthidden', post);
-  Reveal.addEventListener('overviewhidden', post);
-  Reveal.addEventListener('overviewshown', post);
-  Reveal.addEventListener('paused', post);
-  Reveal.addEventListener('resumed', post);
 
-  $('#voice-button').on('click', function(e) {
-    window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
-    var recognition = new webkitSpeechRecognition();
-    recognition.lang = 'ja';
-
-    recognition.addEventListener('result', function(e){
-
-      var message = e.results.item(0).item(0).transcript;
-
-      socket.emit('chat', {
-        message:message
-      });
-
-      marquee(message);
-    }, false);
-
-    recognition.start();
-  });
+  (function addEventListener() {
+    Reveal.addEventListener('ready', post);
+    Reveal.addEventListener('slidechanged', post);
+    Reveal.addEventListener('fragmentshown', post);
+    Reveal.addEventListener('fragmenthidden', post);
+    Reveal.addEventListener('overviewhidden', post);
+    Reveal.addEventListener('overviewshown', post);
+    Reveal.addEventListener('paused', post);
+    Reveal.addEventListener('resumed', post);
+  }())
 
   function post(e){
     socket.emit('slide state', Reveal.getState());
@@ -120,4 +106,15 @@ $(function(){
 
     $marquee.marquee();
   }
+
+  function refresh() {
+    var $slide = $('<section>').attr('data-markdown', '../../../public/md/slide.md')
+                .attr('data-separator', '^\\r?\\n---\\r?\\n$')
+                .attr('data-separator-vertical', '^\\r?\\n--\\r?\\n$')
+                .attr('data-separator-notes', '^Note:')
+    $('.slides').empty().append($slide);
+    RevealMarkdown.initialize();
+    Reveal.setState(Reveal.getState());
+  }
+
 });

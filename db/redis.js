@@ -12,7 +12,7 @@ comment_client.flushdb();
 room_client.flushdb();
 
 function getrandom() {
-  var current_date = (new Date()).valueOf().toString();
+  var current_date = Date.now() + '';
   var random = Math.random().toString();
   var hash = crypto.createHash('sha1').update(current_date + random).digest('hex');
   return hash;
@@ -24,13 +24,13 @@ var comment1 = {
   comment_id: getrandom(),
   user_id: "1",
   comment_text: "comment_text1",
-  datetime: (new Date()).valueOf().toString()
+  datetime: Date.now() + ''
 }
 var comment2 = {
   comment_id: getrandom(),
   user_id: "2",
   comment_text: "comment_text2",
-  datetime: (new Date()).valueOf().toString()
+  datetime: Date.now() + ''
 }
 
 function push_comment_id(comment_id) {
