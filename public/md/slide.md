@@ -1,4 +1,4 @@
-# Reveal with WebSocket
+# Reveal with WebSocket!
 
 ---
 

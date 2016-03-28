@@ -73,7 +73,7 @@ $(function(){
   });
 
 
-  (function addEventListener() {
+  (function() {
     Reveal.addEventListener('ready', post);
     Reveal.addEventListener('slidechanged', post);
     Reveal.addEventListener('fragmentshown', post);
@@ -82,11 +82,11 @@ $(function(){
     Reveal.addEventListener('overviewshown', post);
     Reveal.addEventListener('paused', post);
     Reveal.addEventListener('resumed', post);
-  }())
 
-  function post(e){
-    socket.emit('slide state', Reveal.getState());
-  }
+    function post(e){
+      socket.emit('slide state', Reveal.getState());
+    }
+  }())
 
   function marquee(message) {
 
