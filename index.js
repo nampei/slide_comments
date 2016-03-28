@@ -65,4 +65,9 @@ io.on('connection', function(socket) {
     if (socket.addedType === TYPE.GUEST) return;
     socket.broadcast.to(socket.addedRoom).emit('broad slide', state);
   });
+
+  socket.on('slide refresh', function(state) {
+    if (socket.addedType === TYPE.GUEST) return;
+    socket.broadcast.to(socket.addedRoom).emit('broad slide-refresh', state);
+  });
 });

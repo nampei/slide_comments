@@ -1,8 +1,10 @@
 # Reveal with WebSocket!
 
+made by john.
+
 ---
 
-## Hello World!
+## Hello World!2
 
 --
 
