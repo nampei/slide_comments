@@ -1,14 +1,9 @@
 # slide_comments
 
-IT勉強会用スライドショーツール
+presentation tool.
 
-## 概要
-gaiyou!
+## Feature
 
-## サードパーティ
-
-### React.js
-
-### Redux
-
-### Reveal.js
+- [x] Syncronize your slides
+  - [x] paging
+  - [x] highlight
