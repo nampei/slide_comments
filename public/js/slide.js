@@ -45,7 +45,7 @@ $(function(){
     keyboard: {
       82 /* r */ : function() {
         var state = Reveal.getState();
-        refresh(state);
+        refresh(state)
         socket.emit('slide refresh', state);
       }
     },
@@ -106,6 +106,11 @@ $(function(){
 
     RevealMarkdown.initialize();
     Reveal.setState(state);
+
+    // markdown
+    $('pre code').each(function(i, block) {
+      hljs.highlightBlock(block);
+    });
   }
 
   function marquee(message) {
