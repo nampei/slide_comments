@@ -8,8 +8,8 @@ room_client = redis.createClient();
 comment_client = redis.createClient();
 
 // 初期化
-comment_client.flushdb();
-room_client.flushdb();
+// comment_client.flushdb();
+// room_client.flushdb();
 
 function getrandom() {
   var current_date = Date.now() + '';
@@ -18,34 +18,9 @@ function getrandom() {
   return hash;
 }
 
-var room = {
-  'room_id';,
-  'version_id':,
-  'body':,
-  'user_id':,
-  'datatime':
-}
-
-var room_id = "1";
-
-var comment1 = {
-  comment_id: getrandom(),
-  user_id: "1",
-  comment_text: "comment_text1",
-  datetime: Date.now() + ''
-}
-var comment2 = {
-  comment_id: getrandom(),
-  user_id: "2",
-  comment_text: "comment_text2",
-  datetime: Date.now() + ''
-}
-
 // room_clientにコメントidをプッシュする
 // key: room_id、value: comment_id,,,
-function push_comment_id(comment_id) {
-  room_client.lpush(room_id, comment_id);
-}
+// client.lpush(_id, key, val);
 
 //
 function set_comment(comment) {
