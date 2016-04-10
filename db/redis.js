@@ -18,6 +18,14 @@ function getrandom() {
   return hash;
 }
 
+var room = {
+  'room_id';,
+  'version_id':,
+  'body':,
+  'user_id':,
+  'datatime':
+}
+
 var room_id = "1";
 
 var comment1 = {
@@ -33,10 +41,13 @@ var comment2 = {
   datetime: Date.now() + ''
 }
 
+// room_clientにコメントidをプッシュする
+// key: room_id、value: comment_id,,,
 function push_comment_id(comment_id) {
   room_client.lpush(room_id, comment_id);
 }
 
+//
 function set_comment(comment) {
   comment_client.hmset(
     comment.comment_id,
@@ -46,6 +57,7 @@ function set_comment(comment) {
   );
 }
 
+//
 function get_room_comments(comment) {
   comment_client.hgetall(comment, function(err, obj) {
     console.log("comment_id: " + comment);
@@ -53,15 +65,28 @@ function get_room_comments(comment) {
   });
 }
 
+function get_room_comments_id_list (room_id) {
+  room_client.lrange(room_id, 0, -1, function(err, obj) {
+    console.log("get comment_id list "+ room_id +": " + obj);
+  });
+}
+
+// コメントidをルームにプッシュ
 push_comment_id(comment1.comment_id);
+
+// コメントデータをセット
 set_comment(comment1);
+
+// コメントデータをゲット
 get_room_comments(comment1.comment_id);
+
 push_comment_id(comment2.comment_id);
 set_comment(comment2);
 get_room_comments(comment2.comment_id);
-room_client.lrange(room_id, 0, -1, function(err, obj) {
-  console.log("get comment_id list "+ room_id +": " + obj);
-});
 
+// ルームのコメントidのリストを表示
+get_room_comments_id_list(room_id);
+
+// 終了
 comment_client.quit();
 room_client.quit();
