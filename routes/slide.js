@@ -21,7 +21,7 @@ router.get('/:room/markdown/:version', function(req, res) {
 
   if (version === 'latest') {
     // TODO get latest data from redis
-    res.send('# latest');
+    res.send('# latest\n~~~js\n function(){}~~~\n\n--\n\n1-2\n\n---\n\n2-1\n\n---\n\n2-2');
   } else if (!isNaN(parseFloat(version)) && isFinite(version)) {
     // TODO get old data from redis
     res.send('# notlatest');
