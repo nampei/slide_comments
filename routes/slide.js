@@ -2,6 +2,9 @@
 
 const express = require('express');
 var router = express.Router();
+var redis = require("redis");
+
+var room = require('../db/room');
 
 // const
 var TYPE = require('../const/type');
@@ -17,14 +20,33 @@ router.get('/:room/:type(' + TYPE.HOST + '|' + TYPE.GUEST + ')', function(req, r
 // slide get
 router.get('/:room/markdown/:version', function(req, res) {
 
+  slide_client = redis.createClient();
+
   var version = req.params.version;
+  var room_id = req.params.room;
 
   if (version === 'latest') {
     // TODO get latest data from redis
-    res.send('# latest\n~~~js\n function(){}~~~\n\n--\n\n1-2\n\n---\n\n2-1\n\n---\n\n2-2');
+
+    var sl = room.getLatestSlide(room_id);
+    console.log('sl',sl);
+
+    if (!sl) {
+      sl = {
+        'room_id':room_id,
+        'version_id':1,
+        'body':'#newhoge',
+        'user_id':1,
+        'datetime': Date.now()
+      }
+      room.setSlide(sl);
+    }
+    console.log('bbq',sl);
+
+    res.send(sl.body);
   } else if (!isNaN(parseFloat(version)) && isFinite(version)) {
     // TODO get old data from redis
-    res.send('# notlatest');
+    res.send(room.getSlide(version));
   } else {
     res.send('# Opps!We have some problem!');
   }
