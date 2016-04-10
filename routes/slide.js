@@ -15,9 +15,19 @@ router.get('/:room/:type(' + TYPE.HOST + '|' + TYPE.GUEST + ')', function(req, r
 });
 
 // slide get
-router.get('/:room/markdown', function(req, res) {
-  // TODO get data from redis
-  res.send('# test \n ## testffffff');
+router.get('/:room/markdown/:version', function(req, res) {
+
+  var version = req.params.version;
+
+  if (version === 'latest') {
+    // TODO get latest data from redis
+    res.send('# latest');
+  } else if (!isNaN(parseFloat(version)) && isFinite(version)) {
+    // TODO get old data from redis
+    res.send('# notlatest');
+  } else {
+    res.send('# Opps!We have some problem!');
+  }
 });
 
 module.exports = router;

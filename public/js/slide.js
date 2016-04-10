@@ -97,7 +97,7 @@ $(function(){
   }())
 
   function refresh(state) {
-    var $slide = $('<section>').attr('data-markdown', '../markdown')
+    var $slide = $('<section>').attr('data-markdown', '../markdown/latest')
                 .attr('data-separator', '^\\r?\\n---\\r?\\n$')
                 .attr('data-separator-vertical', '^\\r?\\n--\\r?\\n$')
                 .attr('data-separator-notes', '^Note:');
