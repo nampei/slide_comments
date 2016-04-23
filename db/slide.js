@@ -23,6 +23,7 @@ function getrandom() {
 // room_client.quit();
 
 function setSlide(slide) {
+  console.log(' ----- setSlide >>>>>');
   slide_client.zadd(
     slide.slide_id, Date.now(), JSON.stringify({
     'version_id': slide.version_id,
@@ -31,24 +32,32 @@ function setSlide(slide) {
     'datetime': slide.datetime
     })
   );
+  console.log(' <<<<< setSlide -----');
 }
 
 function getSlide(slide_id, version) {
-  console.log(' ----- getSlide -----');
+  console.log(' ----- getSlide >>>>>');
+  var result;
   slide_client.zrevrange(slide_id, 0, 0, function(err, obj) {
-    console.log('obj',obj);
-    return obj;
+    result = JSON.parse(obj);
   });
-  console.log(' ----- getSlide -----');
+
+  console.log(' <<<<< getSlide -----');
+  return result;
 }
 
 function getLatestSlide(slide_id) {
-  console.log(' ----- getLatestSlide -----');
-  slide_client.zrevrange(slide_id, 0, 0, function(err, obj) {
-    console.log('obj',obj);
-    return obj;
+  console.log(' ----- getLatestSlide >>>>>');
+  return new Promise(function(resolve){
+    slide_client.zrevrange(slide_id, 0, 0, function(err, obj) {
+      if (obj.length) {
+        resolve(JSON.parse(obj[0]));
+      } else {
+        resolve(null);
+      }
+      console.log(' <<<<< getLatestSlide -----');
+    });
   });
-  console.log(' ----- getLatestSlide -----');
 }
 
 // module.exports = room;
