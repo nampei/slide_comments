@@ -1,7 +1,7 @@
 var redis = require("redis");
 var crypto = require('crypto');
 
-// リスト型 <key: room_id, value: comment_id, comment_id, comment_id, ...>
+// リスト型 <key: slide_id, value: comment_id, comment_id, comment_id, ...>
 user_client = redis.createClient();
 
 // 初期化

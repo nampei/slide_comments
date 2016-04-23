@@ -11,7 +11,7 @@ function getrandom() {
 }
 
 // var slide = {
-//   'room_id';,
+//   'slide_id';,
 //   'version_id':,
 //   'body':,
 //   'user_id':,
@@ -24,7 +24,7 @@ function getrandom() {
 
 function setSlide(slide) {
   slide_client.hmset(
-    slide.room_id,
+    slide.slide_id,
     'version_id', slide.version_id,
     'body', slide.body,
     'user_id', slide.user_id,
@@ -32,18 +32,18 @@ function setSlide(slide) {
   );
 }
 
-function getSlide(room_id, version) {
+function getSlide(slide_id, version) {
   console.log('getSlide');
-  slide_client.hgetall(room_id, function(err, obj) {
+  slide_client.hgetall(slide_id, function(err, obj) {
     console.log('obj',obj);
     return obj;
   });
 
 }
 
-function getLatestSlide(room_id) {
+function getLatestSlide(slide_id) {
   console.log('getLatestSlide');
-  slide_client.hgetall(room_id, function(err, obj) {
+  slide_client.hgetall(slide_id, function(err, obj) {
     console.log('obj',obj);
     return obj;
   });
