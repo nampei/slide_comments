@@ -46,6 +46,11 @@ function getSlide(slide_id, version) {
   return result;
 }
 
+/**
+ * 最新のスライドを取得します。
+ * @param  {String} slide_id [description]
+ * @return {Promise}          [description]
+ */
 function getLatestSlide(slide_id) {
   console.log(' ----- getLatestSlide >>>>>');
   return new Promise(function(resolve){

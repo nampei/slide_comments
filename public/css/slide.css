@@ -49,6 +49,13 @@ form input[type=button].voice {
   z-index: 5000;
 }
 
+.editor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+}
+
 .reveal h1,
 .reveal h2,
 .reveal h3,

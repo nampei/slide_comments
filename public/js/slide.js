@@ -33,6 +33,18 @@ $(function(){
     return false;
   });
 
+  var $editor = $('#editor');
+
+  $editor.keydown(function(e){
+    if (e.keyCode === 27) {
+      $(this).toggle();
+      saveSlide();
+      var state = Reveal.getState();
+      refresh(state)
+      socket.emit('slide refresh', state);
+    }
+    e.stopPropagation();
+  });
   // Full list of configuration options available at:
   // https://github.com/hakimel/reveal.js#configuration
   Reveal.initialize({
@@ -43,6 +55,17 @@ $(function(){
     help: false,
     transition: 'slide', // none/fade/slide/convex/concave/zoom
     keyboard: {
+      69 /* e */ : function() {
+
+        if ($editor.is(':visible')) {
+          $editor.toggle();
+          saveSlide();
+        } else {
+          $editor.text($(Reveal.getCurrentSlide()).data('raw-markdown'));
+          $editor.toggle();
+          setTimeout(function(){$editor.focus()}, 0);
+        }
+      },
       82 /* r */ : function() {
         var state = Reveal.getState();
         refresh(state)
@@ -96,6 +119,15 @@ $(function(){
     }
   }())
 
+  function saveSlide() {
+    $.ajax({
+      type: 'post',
+      url: '../markdown',
+      contentType: 'application/json',
+      dataTyoe:'json',
+      data: JSON.stringify({data:$editor.val()})
+    });
+  }
   function refresh(state) {
     var $slide = $('<section>').attr('data-markdown', '../markdown/latest')
                 .attr('data-separator', '^\\r?\\n---\\r?\\n$')
