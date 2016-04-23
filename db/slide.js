@@ -23,30 +23,32 @@ function getrandom() {
 // room_client.quit();
 
 function setSlide(slide) {
-  slide_client.hmset(
-    slide.slide_id,
-    'version_id', slide.version_id,
-    'body', slide.body,
-    'user_id', slide.user_id,
-    "datetime", slide.datetime
+  slide_client.zadd(
+    slide.slide_id, Date.now(), JSON.stringify({
+    'version_id': slide.version_id,
+    'body': slide.body,
+    'user_id': slide.user_id,
+    'datetime': slide.datetime
+    })
   );
 }
 
 function getSlide(slide_id, version) {
-  console.log('getSlide');
-  slide_client.hgetall(slide_id, function(err, obj) {
+  console.log(' ----- getSlide -----');
+  slide_client.zrevrange(slide_id, 0, 0, function(err, obj) {
     console.log('obj',obj);
     return obj;
   });
-
+  console.log(' ----- getSlide -----');
 }
 
 function getLatestSlide(slide_id) {
-  console.log('getLatestSlide');
-  slide_client.hgetall(slide_id, function(err, obj) {
+  console.log(' ----- getLatestSlide -----');
+  slide_client.zrevrange(slide_id, 0, 0, function(err, obj) {
     console.log('obj',obj);
     return obj;
   });
+  console.log(' ----- getLatestSlide -----');
 }
 
 // module.exports = room;
