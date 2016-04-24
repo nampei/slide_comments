@@ -1,6 +1,7 @@
 'use strict';
 
 var express = require('express');
+var bodyParser = require('body-parser')
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
@@ -19,6 +20,9 @@ var passport = require('passport');
 var authorized = require('./middleware/auth');
 
 app.set('view engine', 'ejs');
+
+// parse application/json
+app.use(bodyParser.json())
 
 app.use(session({
   secret : 'cuaM6reezu7aechooLoh',

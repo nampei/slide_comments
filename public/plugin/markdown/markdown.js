@@ -231,6 +231,9 @@
 						// file protocol yields status code 0 (useful for local debug, mobile applications etc.)
 						if ( ( xhr.status >= 200 && xhr.status < 300 ) || xhr.status === 0 ) {
 
+							// customized
+							section.setAttribute('data-raw-markdown', xhr.responseText);
+
 							section.outerHTML = slidify( xhr.responseText, {
 								separator: section.getAttribute( 'data-separator' ),
 								verticalSeparator: section.getAttribute( 'data-separator-vertical' ),
