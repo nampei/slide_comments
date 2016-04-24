@@ -2,49 +2,60 @@ var redis = require("redis");
 var crypto = require('crypto');
 
 // リスト型 <key: slide_id, value: comment_id, comment_id, comment_id, ...>
-user_client = redis.createClient();
+user_data_client = redis.createClient();
+user_id_client = redis.createClient();
 
-// 初期化
-user_client.flushdb();
+// ユーザID: セット型(重複を許さない)
+// user_id_set = [
+  // user_id: 101,
+  // user_id: 102,
+  // user_id: 103,
+// ];
 
-user = {
-  'user_id': 1,
-  'user_name': 'buddha',
-  'user_type': 'super'
+// ユーザ属性: ハッシュ型
+// user_data = {
+  // 101(ユーザID),
+  // 'user_name': 'buddha',
+  // 'user_type': 'super'
+// }
+
+function isMember(member) {
+  var ismember = user_id_client.sismember("user_id_set", member);
+  console.log("ismember", ismember);
+  return ismember;
+}
+
+function getUniqueUserID() {
+  var i = 0;
+  while (i < 10) {
+    var dn = Date.now();
+    if (!isMember(dn)) {
+      return dn;
+    } else {
+      i++;
+    }
+  }
 }
 
 // ユーザデータをセット
-function set_user(user) {
-  user_client.hmset(
-    user.user_id,
-    'name', user.user_name,
-    'type', user.user_type
+function hmsetUserData(user_data) {
+  user_data_client.hmset(
+    user_data.user_id,
+    'name', user_data.user_name,
+    'type', user_data.user_type
   );
 }
 
-// function get_user(user) {
-//   user_client.get('user_id', function(err, data){
-//     console.log(data);
-//   });
-// }
-
-function get_users(user) {
-  user_client.hgetall(user.user_id, function(err, obj) {
-    console.log("user_id: " + user.user_id);
-    console.log(obj);
+// ユーザ情報を全て取得
+function hgetallUserData(user_id) {
+  user_data_client.hgetall(user_id, function(err, data){
+    console.log("err=", err);
+    console.log("data=", data);
+    return data
   });
 }
 
-set_user(user);
-// get_user(user);
-get_users(user);
-
-// 文字列のkey-valueとして値を格納。key:key1、value:val1
-user_client.set("user_id", "1");
-
-// 格納した値を取得。 key: key1
-user_client.get("user_id", function(err, obj) {
-  console.log("get key1: " + obj);
-});
-
-user_client.quit();
+exports.isMember = isMember;
+exports.getUniqueUserID = getUniqueUserID;
+exports.hmsetUserData = hmsetUserData;
+exports.hgetallUserData = hgetallUserData;
