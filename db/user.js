@@ -14,7 +14,9 @@ user_id_client = redis.createClient();
 
 // ユーザ属性: ハッシュ型
 // user_data = {
-  // 101(ユーザID),
+  // 101(key: ユーザID),
+
+  // ----- 以下 vals -----
   // 'user_name': 'buddha',
   // 'user_type': 'super'
 // }

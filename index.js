@@ -10,7 +10,8 @@ var io = require('socket.io')(server);
 var TYPE = require('./const/type');
 
 // routes
-var routes = require('./routes/index');
+var index = require('./routes/index')
+var login = require('./routes/login');
 var auth = require('./routes/auth');
 var users = require('./routes/users');
 var slide = require('./routes/slide');
@@ -37,7 +38,8 @@ app.use(passport.session());
 require('./lib/passport')(passport);
 
 // routing
-app.use('/login', routes);
+app.use('/', index );
+app.use('/login', login);
 app.use('/auth', auth);
 app.use('/me', authorized, users);
 app.use('/slide', slide);
