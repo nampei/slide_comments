@@ -231,8 +231,27 @@
 						// file protocol yields status code 0 (useful for local debug, mobile applications etc.)
 						if ( ( xhr.status >= 200 && xhr.status < 300 ) || xhr.status === 0 ) {
 
-							// customized
-							section.setAttribute('data-raw-markdown', xhr.responseText);
+							// --- customized >>>
+							var escapeHTML = function(str) {
+								str = str + "";
+								var out = "";
+								for(var i=0; i<str.length; i++) {
+								   if(str[i] === '<') {
+								       out += '&lt;';
+								   } else if(str[i] === '>') {
+								       out += '&gt;';
+								   } else if(str[i] === "'") {
+								       out += '&#39;';
+								   } else if(str[i] === '"') {
+								       out += '&quot;';
+								   } else {
+								       out += str[i];
+								   }
+								}
+								return out;
+							}
+							section.setAttribute('data-raw-markdown', escapeHTML(xhr.responseText));
+							// <<< customized ---
 
 							section.outerHTML = slidify( xhr.responseText, {
 								separator: section.getAttribute( 'data-separator' ),
